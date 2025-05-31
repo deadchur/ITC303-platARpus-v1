@@ -3,6 +3,13 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { ARButton } from 'three/examples/jsm/webxr/ARButton.js';
 
+// TODO: refactor to follow OO best practices
+// ARScene.js:
+// ModelLoader.js:
+// AudioManager.js:
+// AnimationAudioSubject.js:
+// PlatARpus.js: 
+
 // design pattern (observer)
 class AudioAnimationSubject {
   constructor() {
@@ -47,6 +54,9 @@ const PlatARpus = () => {
 
   // initialize scene
   useEffect(() => {
+
+    if (typeof window == 'undefined') return;
+
     // WebXR compatibility check
     if ('xr' in navigator) {
       navigator.xr.isSessionSupported('immersive-ar')
@@ -78,27 +88,25 @@ const PlatARpus = () => {
     renderer.xr.enabled = true;
     rendererRef.current = renderer;
 
-    const width = 10;
-    const height = 10;
-    const intensity = 1;
-    const rectangeLight = new THREE.RectAreaLight(0xfffff, intensity, width, height);
-    rectangeLight.position.set(5, 5, 0);
-    rectangeLight.lookAt(0, 0, 0);
-    scene.add(rectangeLight);
+    const rectangleLight = new THREE.RectAreaLight(0xffffff, 1, 10, 10);
+    rectangleLight.position.set(5, 5, 0);
+    rectangleLight.lookAt(0, 0, 0);
+    scene.add(rectangleLight);
     
     const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
     directionalLight.position.set(0, 10, 0);
     scene.add(directionalLight);
 
-    if (containerRef.current) {
-      containerRef.current.appendChild(renderer.domElement);
+    const container = containerRef.current;
+    if (container) {
+      container.appendChild(renderer.domElement);
       
         const arButton = ARButton.createButton(renderer, {
           requiredFeatures: ['hit-test'],
           optionalFeatures: ['dom-overlay'],
           domOverlay: { root: document.body }
         });
-        containerRef.current.appendChild(arButton);
+        container.appendChild(arButton);
     }
 
     // animation loop
@@ -125,16 +133,17 @@ const PlatARpus = () => {
     // cleanup, cache clear?
     return () => {
       window.removeEventListener('resize', handleResize);
-      if (containerRef.current && renderer.domElement) {
-        containerRef.current.removeChild(renderer.domElement);
+      if (container && renderer.domElement) {
+        container.removeChild(renderer.domElement);
       }
       scene.clear();
     };
-  }, [arSupported]);
+  }, []);
 
   // load model
   useEffect(() => {
-    if (!sceneRef.current) return;
+    const scene = sceneRef.current;
+    if (!scene) return;
 
     const loader = new GLTFLoader();
     // replace file path if necessary (Azure Blob, GitHub)
@@ -144,7 +153,7 @@ const PlatARpus = () => {
         const model = gltf.scene;
         model.position.set(0, 0, -3);
         model.scale.set(1, 1, 1);
-        sceneRef.current.add(model);
+        scene.add(model);
         modelRef.current = model;
 
         const mixer = new THREE.AnimationMixer(model);
@@ -180,7 +189,7 @@ const PlatARpus = () => {
       (error) => {
         setErrorMessage(`Error loading model: ${error.message}`);
         console.error('Error loading model:', error);
-        // clear cache/exit
+        // TODO: clear cache/exit
       }
     );
 
@@ -190,10 +199,9 @@ const PlatARpus = () => {
         mixerRef.current.stopAllAction();
       }
     };
-  }, [sceneRef.current]);
+  }, []);
 
   useEffect(() => {
-    const container = containerRef.current;
     const audio = new Audio('./audio/narration.mp3');
     // alternatives (Azure Blob, GitHub, etc)
     audio.preload = 'auto';
@@ -231,13 +239,6 @@ const PlatARpus = () => {
     };
   }, []);
 
-  const handleARSessionStart = () => {
-    if (audioRef.current && modelRef.current) {
-      // need to test
-      audioRef.current.play();
-    }
-  };
-
   useEffect(() => {
     if (rendererRef.current) {
       rendererRef.current.xr.addEventListener('sessionstart', handleARSessionStart);
@@ -246,6 +247,15 @@ const PlatARpus = () => {
       };
     }
   }, [modelLoaded]);
+
+  const handleARSessionStart = () => {
+    if (audioRef.current && modelRef.current) {
+      // need to test
+      audioRef.current.play().catch(error => {
+        console.warn('Audio blocked or failed:', error)
+      });
+    }
+  };
 
   return (
     <div className="ar-container">
@@ -267,16 +277,10 @@ const PlatARpus = () => {
         </div>
       )}
       <div className="controls">
-        <button 
-          onClick={() => audioRef.current?.play()} 
-          disabled={!modelLoaded}
-        >
+        <button onClick={() => audioRef.current?.play()} disabled={!modelLoaded}>
           Play Audio
         </button>
-        <button 
-          onClick={() => audioRef.current?.pause()} 
-          disabled={!modelLoaded}
-        >
+        <button onClick={() => audioRef.current?.pause()} disabled={!modelLoaded}>
           Pause Audio
         </button>
       </div>
