@@ -54,7 +54,7 @@ const PlatARpus = () => {
   const [showHelp, setShowHelp] = useState(false);
 
   // initialize scene
-  useEffect(async () => {
+  useEffect(() => {
 
     if (typeof window == 'undefined') return;
 
