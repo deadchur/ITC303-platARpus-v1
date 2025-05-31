@@ -1,0 +1,30 @@
+.ar-container {
+    background-image: url('/public/picture/wonga.jpeg');
+    background-size: auto;
+    background-position: center;
+    position: relative;
+    width: auto;
+    height: auto;
+}
+
+.canvas-container {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+}
+
+.help-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+}
+
+.help-panel {
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 2rem;
+    border-radius: 6px;
+    margin-top: 0.5rem;
+    max-width: 300px;
+}

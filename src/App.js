@@ -51,9 +51,10 @@ const PlatARpus = () => {
   const [arSupported, setArSupported] = useState(false);
   const [modelLoaded, setModelLoaded] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [showHelp, setShowHelp] = useState(false);
 
   // initialize scene
-  useEffect(() => {
+  useEffect(async () => {
 
     if (typeof window == 'undefined') return;
 
@@ -73,16 +74,21 @@ const PlatARpus = () => {
     const scene = new THREE.Scene();
     sceneRef.current = scene;
 
-    // camera helper
+    // renderer
+    const renderer = new THREE.WebGLRenderer({ 
+      alpha: true,
+      antialias: true
+    });
+
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.z = 5;
+    camera.matrixAutoUpdate = false;
     cameraRef.current = camera;
-
+    
+    // camera helper (used to confirm model loads)
     const helper = new THREE.CameraHelper(camera);
     scene.add(helper);
-
-    // renderer
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.autoClear = false;
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.xr.enabled = true;
@@ -276,6 +282,7 @@ const PlatARpus = () => {
           <p>Loading 3D model...</p>
         </div>
       )}
+      {/**purely for testing */}
       <div className="controls">
         <button onClick={() => audioRef.current?.play()} disabled={!modelLoaded}>
           Play Audio
@@ -283,6 +290,21 @@ const PlatARpus = () => {
         <button onClick={() => audioRef.current?.pause()} disabled={!modelLoaded}>
           Pause Audio
         </button>
+      </div>
+      <div className='help-container'>
+        <button onClick={() => setShowHelp(!showHelp)}>
+          {showHelp ? 'Close help' : 'Help'}
+        </button>
+        {showHelp && (
+          <div className='help-panel'>
+          <h2>How to Use PlatARpus</h2>
+          <ul>
+            <li>Use an iphone with iOS x.x or Android x.x</li>
+            <li>Tap on "Start AR" to begin</li>
+            <li>Slowly look around to view the platypus</li>
+          </ul>
+        </div>
+        )}
       </div>
     </div>
   );
