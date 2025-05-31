@@ -54,7 +54,7 @@ const PlatARpus = () => {
   const [showHelp, setShowHelp] = useState(false);
 
   // initialize scene
-  useEffect(() => {
+  useEffect(async () => {
 
     if (typeof window == 'undefined') return;
 
@@ -112,6 +112,7 @@ const PlatARpus = () => {
     if (container) {
       container.appendChild(renderer.domElement);
       
+        // TODO: remove hit-test
         const arButton = ARButton.createButton(renderer, {
           requiredFeatures: ['hit-test'],
           optionalFeatures: ['dom-overlay'],
@@ -159,10 +160,11 @@ const PlatARpus = () => {
 
     const loader = new GLTFLoader();
     // replace file path if necessary (Azure Blob, GitHub)
-    loader.load('/model/platarpus.glb',
+    loader.load('/model/platarpus_test.glb',
       (gltf) => {
         const model = gltf.scene;
         //model.position.set(0, 0, 3);
+        gltf.scene.position.set(0, 0, -0.5);
         model.scale.set(0.03, 0.03, 0.03);
         scene.add(model);
         modelRef.current = model;
@@ -298,6 +300,21 @@ const PlatARpus = () => {
         <button onClick={() => audioRef.current?.pause()} disabled={!modelLoaded}>
           Pause Audio
         </button>
+      </div>
+      <div className='help-container'>
+        <button onClick={() => setShowHelp(!showHelp)}>
+          {showHelp ? 'Close help' : 'Help'}
+        </button>
+        {showHelp && (
+          <div className='help-panel'>
+          <h2>How to Use PlatARpus</h2>
+          <ul>
+            <li>Use an iphone with iOS x.x or Android x.x</li>
+            <li>Tap on "Start AR" to begin</li>
+            <li>Slowly look around to view the platypus</li>
+          </ul>
+        </div>
+        )}
       </div>
       <div className='help-container'>
         <button onClick={() => setShowHelp(!showHelp)}>
