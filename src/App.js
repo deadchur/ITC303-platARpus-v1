@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { ARButton } from 'three/examples/jsm/webxr/ARButton';
-import { mix } from 'three/src/nodes/TSL.js';
 
 // design pattern (observer)
 class AudioAnimationSubject {
