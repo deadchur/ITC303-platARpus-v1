@@ -193,31 +193,40 @@ const PlatARpus = () => {
   }, [sceneRef.current]);
 
   useEffect(() => {
-    const audio = new Audio();
+    const container = containerRef.current;
+    const audio = new Audio('./audio/narration.mp3');
     // alternatives (Azure Blob, GitHub, etc)
-    audio.src = './audio/narration.mp3';
     audio.preload = 'auto';
     audioRef.current = audio;
 
     // event listeners for the observer
-    audio.addEventListener('timeupdate', () => {
-      subjectRef.current.notifyTimeUpdate(audio.currentTime);
-    });
+    const notifyTimeUpdate = () => {
+      subjectRef.current?.notifyTimeUpdate(audio.currentTime);
+    }
 
-    audio.addEventListener('play', () => {
-      subjectRef.current.notifyPlayStateChange(true);
-    });
+    const notifyPlay = () => {
+      subjectRef.current?.notifyPlayStateChange(true);
+    }
 
-    audio.addEventListener('pause', () => {
-      subjectRef.current.notifyPlayStateChange(false);
-    });
+    const notifyPause = () => {
+      subjectRef.current?.notifyPlayStateChange(false);
+    }
 
-    audio.addEventListener('ended', () => {
-      subjectRef.current.notifyPlayStateChange(false);
-    });
+    const notifyEnded = () => {
+      sceneRef.current?.notifyPlayStateChange(false);
+    }
+
+    audio.addEventListener('timeupdate', notifyTimeUpdate);    
+    audio.addEventListener('play', notifyPlay);
+    audio.addEventListener('pause', notifyPause);
+    audio.addEventListener('ended', notifyEnded);
 
     return () => {
       audio.pause();
+      audio.removeEventListener('timeupdate', notifyTimeUpdate);
+      audio.removeEventListener('play', notifyPlay);
+      audio.removeEventListener('pause', notifyPause);
+      audio.removeEventListener('ended', notifyEnded);
       audio.src = '';
     };
   }, []);
