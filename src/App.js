@@ -148,7 +148,7 @@ const PlatARpus = () => {
     const loader = new GLTFLoader();
     // replace file path if necessary (Azure Blob, GitHub)
     loader.load(
-      './model/platypus.glb',
+      '/model/platarpus_test.glb',
       (gltf) => {
         const model = gltf.scene;
         model.position.set(0, 0, -3);
@@ -202,7 +202,7 @@ const PlatARpus = () => {
   }, []);
 
   useEffect(() => {
-    const audio = new Audio('./audio/narration.mp3');
+    const audio = new Audio('/audio/test_narration.mp3');
     // alternatives (Azure Blob, GitHub, etc)
     audio.preload = 'auto';
     audioRef.current = audio;
