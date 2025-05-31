@@ -30,7 +30,7 @@ class AudioAnimationSubject {
   }
 }
 
-const platARpus = () => {
+const PlatARpus = () => {
   const containerRef = useRef(null);
   const sceneRef = useRef(null);
   const cameraRef = useRef(null);
@@ -275,4 +275,4 @@ const platARpus = () => {
   );
 };
 
-export default platARpus;
+export default PlatARpus;
