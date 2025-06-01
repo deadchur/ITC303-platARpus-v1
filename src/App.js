@@ -86,13 +86,17 @@ const PlatARpus = () => {
     cameraRef.current = camera;
     
     // camera helper (used to confirm model loads)
-    const helper = new THREE.CameraHelper(camera);
-    scene.add(helper);
-    renderer.autoClear = false;
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.xr.enabled = true;
-    rendererRef.current = renderer;
+    //*
+    //
+    // const helper = new THREE.CameraHelper(camera);
+    // scene.add(helper);
+    // renderer.autoClear = false;
+    // renderer.setSize(window.innerWidth, window.innerHeight);
+    // renderer.setPixelRatio(window.devicePixelRatio);
+    // renderer.xr.enabled = true;
+    // rendererRef.current = renderer;
+    //  */
+
 
     const rectangleLight = new THREE.RectAreaLight(0xffffff, 1, 10, 10);
     rectangleLight.position.set(5, 5, 0);
@@ -153,12 +157,11 @@ const PlatARpus = () => {
 
     const loader = new GLTFLoader();
     // replace file path if necessary (Azure Blob, GitHub)
-    loader.load(
-      '/model/platarpus_test.glb',
+    loader.load('/model/platarpus_test.glb',
       (gltf) => {
         const model = gltf.scene;
-        model.position.set(0, 0, -3);
-        model.scale.set(1, 1, 1);
+        //model.position.set(0, 0, 3);
+        model.scale.set(0.03, 0.03, 0.03);
         scene.add(model);
         modelRef.current = model;
 
@@ -282,7 +285,7 @@ const PlatARpus = () => {
           <p>Loading 3D model...</p>
         </div>
       )}
-      {/**purely for testing */}
+      {/* purely for testing */}
       <div className="controls">
         <button onClick={() => audioRef.current?.play()} disabled={!modelLoaded}>
           Play Audio
