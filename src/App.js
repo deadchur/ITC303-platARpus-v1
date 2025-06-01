@@ -86,17 +86,13 @@ const PlatARpus = () => {
     cameraRef.current = camera;
     
     // camera helper (used to confirm model loads)
-    //*
-    //
-    // const helper = new THREE.CameraHelper(camera);
-    // scene.add(helper);
-    // renderer.autoClear = false;
-    // renderer.setSize(window.innerWidth, window.innerHeight);
-    // renderer.setPixelRatio(window.devicePixelRatio);
-    // renderer.xr.enabled = true;
-    // rendererRef.current = renderer;
-    //  */
-
+    const helper = new THREE.CameraHelper(camera);
+    scene.add(helper);
+    renderer.autoClear = false;
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.xr.enabled = true;
+    rendererRef.current = renderer;
 
     const rectangleLight = new THREE.RectAreaLight(0xffffff, 1, 10, 10);
     rectangleLight.position.set(5, 5, 0);
