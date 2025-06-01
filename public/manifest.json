@@ -8,6 +8,16 @@
       "type": "image/x-icon"
     },
     {
+      "src": "accSmallLogo.png",
+      "type": "image/png",
+      "sizes": "474x384"
+    },
+    {
+      "src": "accSmall.png",
+      "type": "image/png",
+      "sizes": "249x202"
+    },
+    {
       "src": "logo192.png",
       "type": "image/png",
       "sizes": "192x192"
