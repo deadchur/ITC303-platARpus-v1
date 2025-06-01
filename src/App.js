@@ -68,7 +68,7 @@ const PlatARpus = () => {
           setErrorMessage(`AR error: ${err.message}`);
         });
     } else {
-      setErrorMessage('WebXR not supported in this browser');
+      setErrorMessage('WebXR not supported in this browser. Please try a compatible browser');
     }
 
     const scene = new THREE.Scene();
@@ -93,6 +93,9 @@ const PlatARpus = () => {
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.xr.enabled = true;
     rendererRef.current = renderer;
+
+    const axesHelper = new THREE.AxesHelper(5);
+    scene.add(axesHelper);
 
     const rectangleLight = new THREE.RectAreaLight(0xffffff, 1, 10, 10);
     rectangleLight.position.set(5, 5, 0);
@@ -161,6 +164,7 @@ const PlatARpus = () => {
         model.scale.set(0.03, 0.03, 0.03);
         scene.add(model);
         modelRef.current = model;
+        console.log("Model loaded");
 
         const mixer = new THREE.AnimationMixer(model);
         mixerRef.current = mixer;
