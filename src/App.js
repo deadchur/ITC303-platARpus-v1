@@ -94,6 +94,7 @@ const PlatARpus = () => {
     renderer.xr.enabled = true;
     rendererRef.current = renderer;
 
+    // testing
     const axesHelper = new THREE.AxesHelper(5);
     scene.add(axesHelper);
 
@@ -120,7 +121,13 @@ const PlatARpus = () => {
 
     // animation loop
     const animate = () => {
-      requestAnimationFrame(animate);      
+      requestAnimationFrame(animate);
+
+      if (mixerRef.current) {
+        const delta = clockRef.current.getDelta();
+        mixerRef.current.update(delta);
+      }
+
       renderer.render(scene, camera);
     };
     animate();
