@@ -59,7 +59,7 @@ const PlatARpus = () => {
     if (typeof window == 'undefined') return;
 
     // WebXR compatibility check
-    if ('xr' in navigator) {
+    if (navigator.xr) {
       navigator.xr.isSessionSupported('immersive-ar')
         .then((supported) => {
           setArSupported(supported);
@@ -120,13 +120,7 @@ const PlatARpus = () => {
 
     // animation loop
     const animate = () => {
-      requestAnimationFrame(animate);
-      
-      if (mixerRef.current) {
-        const delta = clockRef.current.getDelta();
-        mixerRef.current.update(delta);
-      }
-      
+      requestAnimationFrame(animate);      
       renderer.render(scene, camera);
     };
     animate();
@@ -160,8 +154,8 @@ const PlatARpus = () => {
     loader.load('/model/platarpus_test.glb',
       (gltf) => {
         const model = gltf.scene;
-        //model.position.set(0, 0, 3);
-        model.scale.set(0.03, 0.03, 0.03);
+        model.position.set(0.2, 0.2, 0.2);
+        model.scale.set(0.01, 0.01, 0.01);
         scene.add(model);
         modelRef.current = model;
         console.log("Model loaded");
@@ -175,6 +169,8 @@ const PlatARpus = () => {
           const action = mixer.clipAction(clip);
           action.play();
         }
+
+        // TODO: add provision for scale and distance
 
         // Create an observer for the animation(s)
         const animationObserver = {
