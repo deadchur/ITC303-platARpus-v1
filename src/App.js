@@ -158,7 +158,7 @@ const PlatARpus = () => {
 
     const loader = new GLTFLoader();
     // replace file path if necessary (Azure Blob, GitHub)
-    loader.load('/model/platarpus_test.glb',
+    loader.load('/model/Perry.glb',
       (gltf) => {
         const model = gltf.scene;
         model.position.set(0.2, 0.2, 0.2);
