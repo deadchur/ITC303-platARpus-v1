@@ -162,8 +162,8 @@ const PlatARpus = () => {
     loader.load('/model/platarpus.glb',
       (gltf) => {
         const model = gltf.scene;
-        model.position.set(0.1, 0, 0.1);
-        model.scale.set(0.01, 0.01, 0.01);
+        //model.position.set(0, 0, 3);
+        model.scale.set(0.03, 0.03, 0.03);
         scene.add(model);
         modelRef.current = model;
         console.log("Model loaded");
