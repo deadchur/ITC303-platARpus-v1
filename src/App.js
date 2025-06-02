@@ -95,8 +95,8 @@ const PlatARpus = () => {
     rendererRef.current = renderer;
 
     // testing
-    const axesHelper = new THREE.AxesHelper(5);
-    scene.add(axesHelper);
+    //const axesHelper = new THREE.AxesHelper(5);
+    //scene.add(axesHelper);
 
     const rectangleLight = new THREE.RectAreaLight(0xffffff, 1, 10, 10);
     rectangleLight.position.set(5, 5, 0);
@@ -107,6 +107,7 @@ const PlatARpus = () => {
     directionalLight.position.set(0, 10, 0);
     scene.add(directionalLight);
 
+    // add start button to root
     const container = containerRef.current;
     if (container) {
       container.appendChild(renderer.domElement);
@@ -158,11 +159,11 @@ const PlatARpus = () => {
 
     const loader = new GLTFLoader();
     // replace file path if necessary (Azure Blob, GitHub)
-    loader.load('/model/Perry.glb',
+    loader.load('/model/platarpus.glb',
       (gltf) => {
         const model = gltf.scene;
         model.position.set(0.2, 0.2, 0.2);
-        model.scale.set(0.01, 0.01, 0.01);
+        model.scale.set(0.1, 0.1, 0.1);
         scene.add(model);
         modelRef.current = model;
         console.log("Model loaded");
